@@ -8,17 +8,17 @@ from scipy.optimize import brentq
 from scipy.interpolate import griddata
 import plotly.graph_objects as go
 
-# Heading of 
-st.title("Dynamic Implied Volatility Visualization")
+# HEADING OF THE PAGE
+st.title("Implied Volatility Surface Visualization")
 
-# Black-Scholes formula for call option pricing
+# BLACK-SCHOLES FORMULA FOR CALL OPTION PRICING 
 def black_scholes_call(S, K, T, r, sigma, q=0):
     d1 = (np.log(S / K) + (r - q + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
     d2 = d1 - sigma * np.sqrt(T)
     call_value = S * np.exp(-q * T) * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
     return call_value
 
-# Function to estimate implied volatility using Brent's method
+# FUNCTION TO ESTIMATE IMPLIED VOLATILITY USING BRENT'S METHOD
 def calculate_iv(market_price, S, K, T, r, q=0):
     if T <= 0 or market_price <= 0:
         return np.nan
@@ -33,10 +33,10 @@ def calculate_iv(market_price, S, K, T, r, q=0):
 
     return iv
 
-# Sidebar input for model parameters
+# SIDEBAR INPUT FOR MODEL PARAMETERS
 st.sidebar.subheader('Configure Model Parameters')
 
-# Adding hover tooltips for parameters
+# ADDING HOVER TOOLTIPS FOR PARAMETERS
 risk_rate = st.sidebar.number_input(
     'Risk-Free Rate (%)',
     value=1.5,
@@ -50,7 +50,7 @@ div_yield = st.sidebar.number_input(
     help='The dividend yield of the stock. Affects the option pricing by reducing the future cash flows of the underlying asset.'
 )
 
-# User inputs for stock symbol and strikes
+# USER INPUTS FOR STOCK SYMBOL AND STRIKE PRICES
 st.sidebar.subheader('Input Options')
 stock_symbol = st.sidebar.text_input('Stock Ticker', 'AAPL').upper()
 
@@ -73,7 +73,7 @@ if min_strike_perc >= max_strike_perc:
     st.sidebar.error('Minimum strike percentage must be less than the maximum.')
     st.stop()
 
-# Fetch stock data
+# FETCHING STOCK DATA 
 stock = yf.Ticker(stock_symbol)
 today = pd.Timestamp('today').normalize()
 
@@ -113,7 +113,7 @@ else:
     else:
         df = pd.DataFrame(option_chains)
 
-        # Spot price retrieval
+        # RETRIEVING SPOT PRICE
         try:
             spot_data = stock.history(period='5d')
             if spot_data.empty:
@@ -128,13 +128,13 @@ else:
         df['days_to_exp'] = (df['expiration'] - today).dt.days
         df['time_to_exp'] = df['days_to_exp'] / 365
 
-        # Strike price filtering
+        # FILTERING STRIKE PRICE 
         df = df[
             (df['strike'] >= spot_price * (min_strike_perc / 100)) &
             (df['strike'] <= spot_price * (max_strike_perc / 100))
         ].reset_index(drop=True)
 
-        # Calculate implied volatility
+        # CALCULATING IMPLIED VOLATILITY
         df['implied_vol'] = df.apply(
             lambda row: calculate_iv(
                 market_price=row['mid'], 
@@ -147,9 +147,9 @@ else:
         )
 
         df.dropna(subset=['implied_vol'], inplace=True)
-        df['implied_vol'] *= 100  # Convert to percentage
+        df['implied_vol'] *= 100  
 
-        # Visualization
+        # VISUALIZATION
         X, Y, Z = df['time_to_exp'], df['strike'], df['implied_vol']
         grid_X, grid_Y = np.linspace(X.min(), X.max(), 50), np.linspace(Y.min(), Y.max(), 50)
         grid_X, grid_Y = np.meshgrid(grid_X, grid_Y)
@@ -170,6 +170,6 @@ else:
 
         st.plotly_chart(fig)
 
-# Footer
+# FOOTER
 st.markdown("---")
 st.markdown("By Akshat Vij | [GitHub](https://github.com/AkshatVij)")
