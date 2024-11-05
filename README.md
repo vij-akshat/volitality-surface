@@ -1,19 +1,30 @@
-# 🎈 Blank app template
+# Dynamic Implied Volatility Visualization
 
-A simple Streamlit app template for you to modify!
+This project provides a visual, interactive tool for analyzing implied volatility surfaces using real-time stock options data. Built with Streamlit and Plotly, this app allows users to configure options parameters and view a 3D volatility surface for better understanding the volatility landscape of a selected stock.
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
+![Volatility Surface Preview]
 
-### How to run it on your own machine
+---
 
-1. Install the requirements
+## Features
 
-   ```
-   $ pip install -r requirements.txt
-   ```
+- **Black-Scholes Call Option Pricing**: Implements the Black-Scholes model to calculate call option prices.
+- **Implied Volatility Calculation**: Estimates implied volatility using market prices and Brent's optimization method.
+- **Customizable Inputs**: Users can set the risk-free rate, dividend yield, stock ticker, and strike price range.
+- **Dynamic 3D Visualization**: Renders the implied volatility surface as a function of time to expiration and strike price, powered by Plotly.
 
-2. Run the app
+## Installation
 
-   ```
-   $ streamlit run streamlit_app.py
-   ```
+To run the app, ensure you have the following dependencies:
+
+- Python 3.7+
+- [Streamlit](https://streamlit.io/)
+- [yfinance](https://pypi.org/project/yfinance/)
+- pandas
+- numpy
+- scipy
+- plotly
+
+Install them with:
+```bash
+pip install streamlit yfinance pandas numpy scipy plotly
