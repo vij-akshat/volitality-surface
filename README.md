@@ -2,7 +2,7 @@
 
 This project provides a visual, interactive tool for analyzing implied volatility surfaces using real-time stock options data. Built with Streamlit and Plotly, this app allows users to configure options parameters and view a 3D volatility surface for better understanding the volatility landscape of a selected stock.
 
-![Volatility Surface Preview]
+[Volatility Surface Preview](https://volatility-surface.streamlit.app)
 
 ---
 
